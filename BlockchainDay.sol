@@ -1,5 +1,3 @@
-0x710F8bC86dB7E72e81DE4FA71588A7Bd7aCe37eb
-
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -8,6 +6,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+// DEPLOYED AT: 0x710F8bC86dB7E72e81DE4FA71588A7Bd7aCe37eb
+// POLYGON NETWORK
 
 
 contract BlockchainDay is ERC1155Supply, AccessControlEnumerable, Ownable {
