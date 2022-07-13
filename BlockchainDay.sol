@@ -18,11 +18,14 @@ contract BlockchainDay is ERC1155Supply, AccessControlEnumerable, Ownable {
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
-    bytes32 public constant MASTER_ROLE = keccak256("MASTER_ROLE");
+    bytes32 public constant WITHDRAW_ROLE = keccak256("WITHDRAW_ROLE");
 
     constructor() ERC1155("http://nft.myownsatoshi.com/bday/{id}.json") {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        
+        _setupRole(MINTER_ROLE, _msgSender());
+        _setupRole(BURNER_ROLE, _msgSender());
+        _setupRole(WITHDRAW_ROLE, _msgSender());
+
         //Royaties address and amount
         _royaltiesAddress=payable(address(this)); //Contract creator by default
         _royaltiesBasicPoints=500; //5% default
@@ -35,6 +38,15 @@ contract BlockchainDay is ERC1155Supply, AccessControlEnumerable, Ownable {
     function burn(address from, uint256 id, uint256 amount) public onlyRole(BURNER_ROLE) {
         require(balanceOf(from, id)>=amount, "Not enough items!");
         _burn(from, id, amount);
+    }
+
+     //May receive crypto... well who knows
+    receive() external payable {}
+
+    //The SC is not desgined to receive funds but it's better to have this funtion... believe me
+    function withdraw(uint amount) external {
+        require(hasRole(WITHDRAW_ROLE, _msgSender()), "Exception: must have withdraw role to get crypto");
+        payable(msg.sender).transfer(amount);
     }
 
     function uri(uint256 tokenId) public view virtual override returns (string memory) {
